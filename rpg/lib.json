@@ -1,0 +1,11 @@
+{
+    "id": "rpg",
+    "name": "RPG Kit",
+    "version": "0.0.1a",
+    "author": {
+        "name": "Shamus Peveril",
+        "www": "https://shamuspeveril.com/"
+    },
+    "description": "The basic structure you need for a jRPG.",
+    "main": "main.ts"
+}
