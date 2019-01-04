@@ -32,14 +32,13 @@ function getObjectLibrary(file:Cozy.File) {
 
 **/
 
-export function loadLotusMap(path:string, existingMap?:GameMap) {
+export function loadLotusMap(mapFile:Cozy.File, existingMap?:GameMap) {
     let map = existingMap || new GameMap({});
-    let mapFile = Cozy.gameDir().file(path);
     let mapDir = mapFile.dir;
 
     let data = mapFile.getData('json');
 
-    map.filename = path;
+    map.filename = mapFile.path;
     map.tileSize = new PIXI.Point(80, 80);
     map.size = new PIXI.Point(data.dimensions.mapWidth / map.tileSize.x, data.dimensions.mapHeight / map.tileSize.y);
 

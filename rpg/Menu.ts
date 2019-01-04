@@ -173,7 +173,9 @@ export class Menu extends Cozy.UiComponent {
         }
 
         if (!this.paused) {
-            if (this.selectionIndex >= this.selections.length) {
+            if (this.selectionIndex === undefined) {
+                this.setSelection(0);
+            } else if (this.selectionIndex >= this.selections.length) {
                 this.setSelection(this.selections.length - 1);
             } else {
                 this.setSelection(this.selectionIndex);

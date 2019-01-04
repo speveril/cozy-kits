@@ -22,7 +22,6 @@ export class PartyMember {
             triggersEvents: true,
             respectsObstructions: 'true'
         });
-        console.log("makeEntity =>", this.entity);
         return this.entity;
     }
 }

@@ -44,6 +44,9 @@ export class MapEvent extends MapRect {
 
     set solid(v:boolean) {
         this._solid = v;
+
+        if (!this.obstructions) return;
+
         // _.each(this.obstructions, function(o) {
         this.obstructions.forEach((o) => {
             o.active = v;
@@ -61,6 +64,8 @@ export class MapTrigger extends MapRect {
 
     set solid(v:boolean) {
         this._solid = v;
+        
+        if (!this.obstructions) return;
         // _.each(this.obstructions, function(o) {
         this.obstructions.forEach((o) => {
             o.active = v;
@@ -148,8 +153,18 @@ export class MapZone {
 }
 
 export class GameMap {
+    public static mapFile:string;
+    public static musicName:string;
     public static persistent = { global: {} };
     public static debugRender = true;
+
+    public static preload():Promise<any> {
+        if (this.mapFile) {
+            return Cozy.gameDir().file(this.mapFile).load();
+        } else {
+            return Promise.resolve();
+        }
+    }
 
     size:PIXI.Point                         = null;
     tileSize:PIXI.Point                     = null;
@@ -165,8 +180,10 @@ export class GameMap {
     objectSources:{[key:string]:string}     = null;
 
     constructor(args) {
-        if (typeof args === 'string') {
+        if (args instanceof Cozy.File) {
             loadMap(args, this);
+        } else if (this.constructor['mapFile']) {
+            loadMap(Cozy.gameDir().file(this.constructor['mapFile']), this);
         } else {
             this.size = new PIXI.Point(args.width || 0, args.height || 0);
             this.tileSize = new PIXI.Point(args.tileWidth || 16, args.tileHeight || 16);
@@ -182,7 +199,10 @@ export class GameMap {
 
         getRenderPlane().clear();
         // _.each(this.layers, (mapLayer:MapLayer, i:number) => {
-        this.layers.forEach((mapLayer:MapLayer) => {
+
+        console.log("Layers>", this.layers);
+        for (let mapLayer of this.layers) {
+            console.log("  [setting up]", mapLayer);
             let x = 0, y = 0;
 
             mapLayer.patchLayer = getRenderPlane().addRenderLayer();
@@ -190,7 +210,7 @@ export class GameMap {
 
             // TODO reconcile tiles + patches on the same layer if I ever care
             // _.each(mapLayer.tiles, (tileIndex) => {
-            mapLayer.tiles.forEach((tileIndex) => {
+            for (let tileIndex of mapLayer.tiles) {
                 mapLayer.setTile(x, y, tileIndex);
 
                 x++;
@@ -198,7 +218,7 @@ export class GameMap {
                     x = 0;
                     y++;
                 }
-            });
+            }
 
             if (mapLayer.patches) {
                 for (let patch of mapLayer.patches) {
@@ -206,13 +226,17 @@ export class GameMap {
                 }
             }
 
-            // _.each(mapLayer.entities, (entity:Entity) => entity.place(entity.spawn.x, entity.spawn.y, mapLayer));
-            mapLayer.entities.forEach((entity:Entity) => {
-                entity.place(entity.spawn.x, entity.spawn.y, mapLayer);
-            });
+            if (mapLayer.entities) {
+                console.log("######## placing entities");
+                // _.each(mapLayer.entities, (entity:Entity) => entity.place(entity.spawn.x, entity.spawn.y, mapLayer));
+                for (let entity of mapLayer.entities) {
+                    console.log(" ENTITY>", entity.name);
+                    entity.place(entity.spawn.x, entity.spawn.y, mapLayer);
+                }
+            }
+            
             this.sortSprites(mapLayer);
-
-        });
+        }
     }
 
     frame(dt:number) {
@@ -256,11 +280,13 @@ export class GameMap {
 
     update(dt):void {
         this.layers.forEach((layer) => {
-            if (layer.dirty || layer.entities.length > 0) {
-                layer.dirty = false;
-                this.sortSprites(layer);
+            if (layer.entities) {
+                if (layer.dirty || layer.entities.length > 0) {
+                    layer.dirty = false;
+                    this.sortSprites(layer);
+                }
+                layer.entities.forEach((e) => e.update(dt));
             }
-            layer.entities.forEach((e) => e.update(dt));
         });
     }
 

@@ -314,7 +314,8 @@ export class System {
             let money = 0;
             let loot = [];
             // _.each(monster.treasure, (t:any) => {
-            for (let t of monster.treasure) {
+            console.log("-->", monster.treasure);
+            for (let t of monster.treasure) { // TODO not iterable for cultist?
                 if (t.chance && Math.random()*100 > t.chance) {
                     return;
                 }

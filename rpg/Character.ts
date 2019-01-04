@@ -14,7 +14,7 @@ export class Character {
     private _hp:number;
     maxhp:number;
     sprite:string;
-    treasure:any;
+    treasure:any[];
     portrait:string;
     title:string;
     actions:Array<any>;
@@ -31,8 +31,7 @@ export class Character {
         this.name        = args.name;
         this.sprite      = args.sprite;
         this.levels      = args.levels || [];
-        // this.treasure    = _.clone(args.treasure);
-        this.treasure    = Object.assign({}, args.treasure);
+        this.treasure    = args.treasure ? args.treasure.slice(0) : []; // clone the treasure array, don't refer to it directly
 
         Character.attributes.forEach((attribute) => this.baseAttribute[attribute] = 0);
         // if (_.has(args, 'attributes')) {

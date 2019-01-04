@@ -15,11 +15,11 @@ export class MapLayer {
     tileLookup:Array<MapTile>               = [];
     events:Array<MapEvent>                  = [];
     triggers:Array<MapTrigger>              = [];
-    entities:Array<Entity>                  = null;
-    patches:Array<MapPatch>                 = null;
-    zones:Array<MapZone>                    = null;
-    explicitObstructions:MapObstruction[]   = null;
-    obstructions:Array<MapObstruction>      = null;
+    entities:Array<Entity>                  = [];
+    patches:Array<MapPatch>                 = [];
+    zones:Array<MapZone>                    = [];
+    explicitObstructions:MapObstruction[]   = [];
+    obstructions:Array<MapObstruction>      = [];
     obstructionsFrozen:boolean              = false;
     _name:string                            = '';
     walkable:boolean                        = true;
@@ -289,7 +289,6 @@ export class MapLayer {
     }
 
     getObstructionsByName(name:string):MapObstruction[] {
-        if (!this.obstructions) return [];
         // return _.where(this.obstructions, { name: name });
         return this.obstructions.filter((x) => x.name === name);
     }

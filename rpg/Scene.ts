@@ -65,7 +65,7 @@ export class Scene {
             cameraFollow(getPlayer());
         }
 
-        // console.log("PUSHSCENE>", wrapper);
+        console.log("PUSHSCENE>", wrapper);
         this.scenes.push([wrapper.call(this)]);
         this.currentScene[1] = this.currentScene[0].next(0);
     }

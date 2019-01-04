@@ -7,11 +7,19 @@ import { Party } from './Party';
 
 export class SavedGame {
     static count():number {
-        return SavedGame.getList().length;
+        // this is kind of dumb.
+        var files:Cozy.UserdataFile[] = Cozy.UserdataFile.glob("saves/save-*.json");
+        return files.length;
     }
 
-    static getList():Array<SavedGame> {
-        var files:Array<Cozy.UserdataFile> = Cozy.UserdataFile.glob("saves/save-*.json");
+    static async getList():Promise<SavedGame[]> {
+        var files:Cozy.UserdataFile[] = Cozy.UserdataFile.glob("saves/save-*.json");
+
+        let loadPromises = [];
+        for (let f of files) {
+            loadPromises.push(f.load());
+        }
+        await Promise.all(loadPromises);
 
         // reverse sort by modification time
         files.sort((a,b) => {

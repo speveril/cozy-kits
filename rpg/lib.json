@@ -7,5 +7,6 @@
         "www": "https://shamuspeveril.com/"
     },
     "description": "The basic structure you need for a jRPG.",
+    "css": ["**/*.css"],
     "main": "main.ts"
 }

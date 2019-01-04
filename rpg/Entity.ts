@@ -66,7 +66,12 @@ export class Entity {
     }
 
     constructor(args) {
-        this.spriteDef = Object.assign({}, args.sprite);
+        if (typeof args.sprite === 'string') {
+            this.spriteDef = Cozy.gameDir().file(args.sprite).getData('json');
+        } else {
+            this.spriteDef = Object.assign({}, args.sprite);
+        }
+
         this.spriteDef.moveCallback = () => this.onSpriteMove();
         this.sourceSpriteDef = args.sourceSpriteDef;
 
@@ -110,7 +115,7 @@ export class Entity {
 
     emote(key:string) {
         if (!this.emoteSprite) {
-            this.emoteSprite = new Cozy.Sprite("sprites/emotes.sprite");
+            this.emoteSprite = new Cozy.Sprite(Cozy.gameDir().file("sprites/emotes.sprite").getData('json')); // TODO ??
             this.layer.spriteLayer.add(this.emoteSprite);
             this.emoteSprite.setPosition(this.sprite.position.x, this.sprite.position.y + 0.01);
             // TODO this would be handled much better with multilayer sprites
@@ -156,7 +161,7 @@ export class Entity {
         }
 
         // if (!_.contains(this.layer.entities, this)) {
-        if (!this.layer.entities['includes'](this)) { // TODO old TS workaround
+        if (!this.layer.entities.includes(this)) {
             this.layer.entities.push(this);
         }
 

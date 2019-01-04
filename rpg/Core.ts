@@ -17,7 +17,8 @@ let loadSkip:Array<string>              = [];
 let player:Entity                       = null;
 let map:GameMap                         = null;
 let mapkey:string                       = '';
-let mapLookup:{ [name:string]: Array<any> } = {};
+let mapLookup:{ [name:string]: any[] } = {};
+let spriteLookup: { [name:string]: Cozy.File } = {};
 
 let cameraSpeed:number                  = 750;
 let cameraHalf:PIXI.Point;
@@ -68,7 +69,6 @@ export function load(config:any):Array<Promise<any>> {
     mainMenuClass        = config.mainMenuClass || null;
     mapLookup            = config.maps || {};
 
-
     Item.load(config.items || {});
 
     cameraHalf = new PIXI.Point(Cozy.config('width') / 2, Cozy.config('height') / 2);
@@ -76,6 +76,18 @@ export function load(config:any):Array<Promise<any>> {
     console.log(JSON.stringify(cameraHalf));
 
     let promises = [];
+
+    for (let k of Object.keys(mapLookup)) {
+        mapLookup[k][0].preload();
+    }
+
+    spriteLookup = {};
+    if (config.sprites) {
+        for (let k of Object.keys(config.sprites)) {
+            spriteLookup[k] = config.sprites[k];
+            promises.push(spriteLookup[k].load());
+        }        
+    }
 
     // scrape all images under the project
     let textures = {};
@@ -141,12 +153,15 @@ export function frame(dt) {
     } else {
         switch(controls) {
             case ControlMode.Map:
-                console.warn("bad controls [map]: >>",map,player, ControlStack); break;
+                // console.warn("bad controls [map]: >>",map,player, ControlStack); break;
+                console.log("bad controls [map]: >>",map,player, ControlStack); break;
             case ControlMode.Scene:
-                console.warn("bad controls [scene]: >>",Scene.currentScene, ControlStack); break;
+                // console.warn("bad controls [scene]: >>",Scene.currentScene, ControlStack); break;
+                console.log("bad controls [scene]: >>",Scene.currentScene, ControlStack); break;
             case ControlMode.Menu:
-                console.warn("bad controls [menu]: >>",Menu.currentMenu, ControlStack); break;
-        }
+                // console.warn("bad controls [menu]: >>",Menu.currentMenu, ControlStack); break;
+                console.log("bad controls [menu]: >>",Menu.currentMenu, ControlStack); break;
+            }
     }
 
     if (cameraTarget && cameraTarget.sprite) {
@@ -274,7 +289,13 @@ export function startMap(key:string, x?:number, y?:number, layerName?:string, op
         // // let mapArgs = _.clone(mapLookup[mapkey]);
         let mapArgs = mapLookup[mapkey].slice(0);
         let mapType = mapArgs.shift();
-        rawOpenMap(mapArgs, mapType);
+
+        map = null;
+        rawOpenMap(mapArgs, mapType)
+            .then((m) => map = m);
+        while (!map) yield;
+
+        console.log(map);
 
         player.place((x + 0.5) * map.tileSize.x, (y + 0.5) * map.tileSize.y, map.getLayerByName(layerName || '#spritelayer'));
         if (opts.direction) player.dir = opts.direction;
@@ -287,13 +308,21 @@ export function startMap(key:string, x?:number, y?:number, layerName?:string, op
     });
 }
 
-export function rawOpenMap(args:any, type?:any) {
+export async function rawOpenMap(args:any, type?:any) {
     if (type === undefined) {
         type = GameMap;
     }
 
-    map = new type(args);
-    map.open();
+    console.log("rawOpenMap>", args);
+    // if we're loading a map file by path, preload the file
+    if (typeof args === 'string') {
+        args = Cozy.gameDir().file(args);
+        await args.load();
+        console.log("Map file loaded:", args);
+    }
 
-    return map;
+    let newmap = new type(args);
+    newmap.open();
+
+    return newmap;
 }

@@ -17,12 +17,12 @@ export var mapLoadFuncs = {
 
 /**
 Magic loader. Tries to figure out what kind of map it is an load appropriately.
-@param path              Path to the file.
+@param file              A loaded Cozy.File
 **/
-export function loadMap(path:string, existingMap?:GameMap):GameMap {
-    let loaderFunc = mapLoadFuncs[Cozy.gameDir().file(path).extension];
+export function loadMap(file:Cozy.File, existingMap?:GameMap):GameMap {
+    let loaderFunc = mapLoadFuncs[file.extension];
     if (!loaderFunc) {
-        throw new Error("Could not figure out how to load map " + path + ".");
+        throw new Error("Could not figure out how to load map " + file.name + ".");
     }
-    return loaderFunc(path, existingMap);
+    return loaderFunc(file, existingMap);
 }
