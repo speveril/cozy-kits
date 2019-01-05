@@ -1,12 +1,15 @@
 import { Character } from './Character';
 
+function numberSort(a,b) {
+    return a-b;
+} 
+
 // var dbg = console.log.bind(console); // uncomment to turn ON debugging
 var dbg = function(...args) {}; // uncomment to turn OFF debugging
 
 var rollDie = (dieSize) => Math.floor(Math.random() * dieSize) + 1;
 var rollDice = (numDice, dieSize) => {
     var rolls = [];
-    // _.times(numDice, () => rolls.push(rollDie(dieSize)));
     for (let i = 0; i < numDice; i++) {
         rolls.push(rollDie(dieSize));
     }
@@ -248,7 +251,7 @@ export class Dice {
         if (args[1].type !== 'roll') throw new Error("Parameter 2 to best() must be a roll.");
         var best:number = <number>this.resolveNode(actor, args[0]);
         var rolls = rollDice(this.resolveNode(actor, args[1].lhs), this.resolveNode(actor, args[1].rhs));
-        rolls.sort();
+        rolls.sort(numberSort);
         var result = rolls.slice(-best).reduce((accum:number, num:number) => accum + num);
         dbg(rolls,"->",result);
         return result;
@@ -258,7 +261,7 @@ export class Dice {
         if (args[1].type !== 'roll') throw new Error("Parameter 2 to best() must be a roll.");
         var worst:number = <number>this.resolveNode(actor, args[0]);
         var rolls = rollDice(this.resolveNode(actor, args[1].lhs), this.resolveNode(actor, args[1].rhs));
-        rolls.sort();
+        rolls.sort(numberSort);
         var result = rolls.slice(0, worst).reduce((accum:number, num:number) => accum + num);
         dbg(rolls,"->",result);
         return result;
