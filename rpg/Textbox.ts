@@ -46,7 +46,7 @@ export class Textbox extends Cozy.UiComponent {
     setText(text:string) {
         this.inner.innerHTML = '';
         this.appendText(text);
-        this.inner.scrollTop = -2;
+        // this.inner.scrollTop = -2;
     }
 
     appendText(text:string) {
@@ -119,9 +119,9 @@ export class Textbox extends Cozy.UiComponent {
         if (!cursor) {
             cursor = this.inner.childNodes[this.inner.childNodes.length - 1];
         }
-        for (var i = this.cursors.length; i >= 0; i--) {
-            if (cursor.previousSibling) {
-                (<HTMLElement>cursor.previousSibling).scrollIntoView(false);
+        for (var i = this.cursors.length - 1; i >= 0; i--) {
+            if (this.cursors[i].previousSibling) {
+                (<HTMLElement>this.cursors[i].previousSibling).scrollIntoView(false);
                 break;
             }
         }
