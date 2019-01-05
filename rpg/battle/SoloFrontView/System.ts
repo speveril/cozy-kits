@@ -92,7 +92,7 @@ export class System {
         //// LOOP
 
         var result = null;
-        var battleOutcome:any = null;
+        let battleOutcome:any = null;
         var dt:any = 0;
 
         yield *Scene.waitFrame(1);
@@ -194,16 +194,18 @@ export class System {
             }
 
             result = {};
-            // _.each(monsterAction, (params:any, effect:string) => {
-            for (let effect of Object.keys(monsterAction)) {
+            for (let effect of Object.getOwnPropertyNames(monsterAction)) {
+                console.log("attack effect:", effect);
                 let params = monsterAction[effect];
-                if (effect[0] === '_') return;
+                if (effect[0] === '_') continue;
                 let r = Effect.do(effect, monster, player, params);
-                // _.each(r, (v, k:string) => {
-                for (let k of Object.keys(r)) {
-                    if (k === 'success') result[k] = result[k] || v;
-                    else result[k] = result[k] ? result[k] + v : v;
+                console.log(" (", r, ")");
+                for (let k of Object.getOwnPropertyNames(r)) {
+                    if (k === 'success') result[k] = result[k] || r[k];
+                    else result[k] = result[k] ? result[k] + r[k] : r[k];
+                    console.log("  ", k, '->', r[k], '->', result[k]);
                 }
+                console.log("=>", result);
             }
 
             if (result.sound) {
@@ -214,6 +216,7 @@ export class System {
             }
 
             if (monsterAction.basicAttack) {
+                console.log("monster basicattack ->", result);
                 switch (result.type) {
                     case 'crit':
                         getSFX('battle_playerhit').play(); // TODO
@@ -253,6 +256,8 @@ export class System {
         }
 
         //// RESOLUTION PHASE
+
+        console.log("battleoutcome>>", battleOutcome);
 
         if (battleOutcome.defeat) {
             this.output("\nYou have died!");
@@ -317,7 +322,7 @@ export class System {
             console.log("-->", monster.treasure);
             for (let t of monster.treasure) { // TODO not iterable for cultist?
                 if (t.chance && Math.random()*100 > t.chance) {
-                    return;
+                    continue;
                 }
 
                 if (t.item === '_money') {
