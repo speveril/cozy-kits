@@ -275,9 +275,10 @@ export class Entity {
                 }
             }
             for (let j = 0; j < edges.length; j++) {
-                let closest = Cozy.closestPointOnLine(projectedPosition, edges[j][0], edges[j][1]);
+                let closest = Cozy.closestPointOnLine(projectedPosition, edges[j][0], edges[j][1]); 
                 let d = Cozy.dist(projectedPosition, closest);
 
+                // TODO *also* account for angle between entity travel vector and the obstruction line, if distances are equal
                 if (d < from.radius) {
                     return {
                         dsort: Cozy.dist({ x: from.sprite.position.x, y: from.sprite.position.y }, closest),

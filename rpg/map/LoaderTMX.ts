@@ -216,7 +216,7 @@ export function loadTMX(file:Cozy.File, existingMap?:GameMap) {
     const data = file.getData('xml');
     const mapEl = data.getElementsByTagName('map')[0];
 
-    map.filename = file.path;
+    map.filename = file.relativePath(Cozy.gameDir()).replace(/\\/, '/'); // TODO this is kind of dumb, need to reconcile this stuff
     map.size = new PIXI.Point(parseInt(mapEl.getAttribute('width'), 10), parseInt(mapEl.getAttribute('height'), 10));
     map.tileSize = new PIXI.Point(parseInt(mapEl.getAttribute('tilewidth'), 10), parseInt(mapEl.getAttribute('tileheight'), 10));
 
