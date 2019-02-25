@@ -37,11 +37,13 @@ export class SavedGame {
 
     static fromState():Promise<SavedGame> {
         getUiPlane().hide();
-        let resolve = null;
-        let p = <Promise<SavedGame>>new Promise((_res, _rej) => resolve = _res);
+        let resolve;
+        let p = <Promise<SavedGame>>new Promise((_res, _rej) => {
+            resolve = _res;
+        });
 
         window.requestAnimationFrame(() => {
-            Cozy.captureScreenshot(64)
+            Cozy.captureScreenshot(48)
                 .then((image) => {
                     getUiPlane().show();
 

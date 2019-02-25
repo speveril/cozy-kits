@@ -37,7 +37,7 @@ let music:{ [name:string]: Cozy.Music } = {};
 let moneyName:string                    = "G";
 
 export function load(config:any):Array<Promise<any>> {
-    console.log(`Loading project lotus core`);
+    console.log(`Loading RPGKit core`);
 
     renderPlane = <Cozy.RenderPlane>Cozy.addPlane(Cozy.RenderPlane, { className: 'render-plane', renderBackground: 'rgba(0,0,0,0)' });
     if (Cozy.getDebug()) debugPlane = <Cozy.RenderPlane>Cozy.addPlane(Cozy.RenderPlane, { className: 'render-plane', renderBackground: 'rgba(0,0,0,0)' });
