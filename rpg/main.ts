@@ -30,6 +30,3 @@ import * as SoloFrontView from './battle/SoloFrontView/System'
 export const BattleSystems = {
     SoloFrontView: SoloFrontView.System
 };
-
-window['Cozy'].addStyleSheet('rpg.css');
-window['Cozy'].addStyleSheet('battle/SoloFrontView/battle.css');
