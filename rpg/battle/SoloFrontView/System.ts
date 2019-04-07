@@ -6,7 +6,7 @@ import { Dice } from '../../Dice';
 import { Effect } from '../../Effect';
 import { Item } from '../../Item';
 import { Menu } from '../../Menu';
-import { Textbox } from '../../Textbox';
+import { Textbox } from '../../../shared/Textbox';
 import { Party } from '../../Party';
 import { Scene } from '../../Scene';
 import { uiBattleScreen } from './uiBattleScreen';
@@ -112,7 +112,7 @@ export class System {
 
         monsterSprite.setPosition(80, 0);
 
-        Textbox.show("Encountered " + monster.name + "!");
+        Textbox.show(getUiPlane(), "Encountered " + monster.name + "!");
 
         // TODO sounds should be passed into the configuration somehow, or something like that
         while (!battleOutcome) {

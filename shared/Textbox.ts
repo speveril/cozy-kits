@@ -1,17 +1,16 @@
 import * as Cozy from 'Cozy';
-import { getUiPlane } from './Core';
 
 export class Textbox extends Cozy.UiComponent {
     public static box:Textbox;
 
-    static show(text:string) {
+    static show(uiplane:Cozy.UiPlane, text:string) {
         if (this.box) {
             this.hide();
         }
 
         this.box = new Textbox();
         this.box.setText(text);
-        getUiPlane().addChild(this.box);
+        uiplane.addChild(this.box);
     }
 
     static hide() {
@@ -20,12 +19,10 @@ export class Textbox extends Cozy.UiComponent {
         }
     }
 
-
     public skipWhitespace:boolean = true;
 
     private paused:Boolean = false;
     private inner:HTMLElement;
-    private innerDisplay:HTMLElement;
     private textSpeed = 100;
     private textPos = 0;
     private cursors:Array<HTMLElement>;

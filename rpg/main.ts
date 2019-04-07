@@ -14,7 +14,7 @@ export * from './Menu';
 export * from './Party';
 export * from './SavedGame';
 export * from './Scene'
-export * from './Textbox'
+export * from '../shared/Textbox'
 
 export * from './battle/Battle';
 

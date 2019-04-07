@@ -2,7 +2,7 @@ import * as Cozy from "Cozy";
 import { getPlayer, getMap, getUiPlane, cameraFollow, getCameraSpeed, setCameraSpeed, getCameraFocus, centerCameraOn } from './Core';
 import { ControlStack, ControlMode } from './ControlStack';
 import { Entity } from './Entity';
-import { Textbox } from './Textbox';
+import { Textbox } from '../shared/Textbox';
 
 enum WaitType { Time, Button, FadeOut, FadeIn };
 class Wait {
@@ -198,9 +198,9 @@ export class Scene {
         for(var i = 0; i < lines.length; i++) {
             if (i === 0) {
                 if (speaker) {
-                    Textbox.show(`<span class="speaker">${speaker}:</span> ${lines[i]}`);
+                    Textbox.show(getUiPlane(), `<span class="speaker">${speaker}:</span> ${lines[i]}`);
                 } else {
-                    Textbox.show(lines[i]);
+                    Textbox.show(getUiPlane(), lines[i]);
                 }
             } else {
                 Textbox.box.appendText("\n" + lines[i]);
