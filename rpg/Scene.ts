@@ -1,7 +1,7 @@
 import * as Cozy from "Cozy";
 import { getPlayer, getMap, getUiPlane, cameraFollow, getCameraSpeed, setCameraSpeed, getCameraFocus, centerCameraOn } from './Core';
 import { ControlStack, ControlMode } from './ControlStack';
-import { Entity } from './Entity';
+import { Entity } from '../shared/Entity';
 import { Textbox } from '../shared/Textbox';
 
 enum WaitType { Time, Button, FadeOut, FadeIn };

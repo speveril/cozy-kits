@@ -2,7 +2,7 @@ import * as Cozy from 'Cozy';
 import { getUiPlane, getMap, getMapkey, getCharacters, getPlayer, setPlayer, setCharacters, startMap } from './Core';
 import { Character } from './Character';
 import { Inventory } from './Inventory';
-import { GameMap } from './map/Map';
+import { GameMap } from '../shared/map/Map';
 import { Party } from './Party';
 
 export class SavedGame {

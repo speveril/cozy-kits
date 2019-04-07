@@ -1,5 +1,4 @@
 import * as Cozy from 'Cozy';
-import { getRenderPlane, getDebugPlane } from '../Core';
 import { Entity } from '../Entity';
 import { loadMap } from './Loader';
 import { MapLayer } from './MapLayer';
@@ -190,23 +189,21 @@ export class GameMap {
         }
     }
 
-    open():void {
-        let debugPlane = getDebugPlane();
+    open(renderPlane:Cozy.RenderPlane, debugPlane:Cozy.RenderPlane):void {
         if (debugPlane) {
             debugPlane.clear();
             this.debugLayer = debugPlane.addRenderLayer();
         }
 
-        getRenderPlane().clear();
-        // _.each(this.layers, (mapLayer:MapLayer, i:number) => {
-
+        renderPlane.clear();
+        
         console.log("Layers>", this.layers);
         for (let mapLayer of this.layers) {
             console.log("  [setting up]", mapLayer);
             let x = 0, y = 0;
 
-            mapLayer.patchLayer = getRenderPlane().addRenderLayer();
-            mapLayer.spriteLayer = getRenderPlane().addRenderLayer();
+            mapLayer.patchLayer = renderPlane.addRenderLayer();
+            mapLayer.spriteLayer = renderPlane.addRenderLayer();
 
             // TODO reconcile tiles + patches on the same layer if I ever care
             // _.each(mapLayer.tiles, (tileIndex) => {

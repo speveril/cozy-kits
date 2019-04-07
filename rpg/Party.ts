@@ -1,8 +1,6 @@
-import * as Cozy from 'Cozy';
-
 import { getCharacters } from './Core';
 import { Character } from './Character';
-import { Entity } from './Entity';
+import { Entity } from '../shared/Entity';
 import { Inventory } from './Inventory';
 import { Item } from './Item';
 

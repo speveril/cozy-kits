@@ -1,7 +1,4 @@
 import * as Cozy from 'Cozy';
-
-import { getPlayer } from './Core';
-import { Behavior } from './Behavior';
 import { MapLayer } from './map/MapLayer';
 
 const BOUNCE_GRAVITY = 850;
@@ -9,6 +6,8 @@ const BOUNCE_ENTROPY = 0.5;
 const BOUNCE_THRESHOLD = 30;
 
 export class Entity {
+    public static behaviors = {};
+
     private spriteDef:any; // can be an object or a string
     private paused:boolean;
     private bouncing:any;
@@ -80,7 +79,9 @@ export class Entity {
         this.respectsObstructions = (args.respectsObstructions !== undefined ? args.respectsObstructions === 'true' : true);
         this.radius = args.radius || this.spriteDef.radius || 8;
         this.name = args.name;
-        this.behavior = args.behavior && Behavior[args.behavior] ? Behavior[args.behavior](this) : undefined;
+        this.behavior = typeof args.behavior === 'string' && Entity.behaviors[args.behavior]
+            ? Entity.behaviors[args.behavior](this) 
+            : args.behavior;
         this.paused = false;
         this.bouncing = false;
         this.solid = !(args.solid === 'false' || args.solid === false);
@@ -339,8 +340,8 @@ export class Entity {
 
                 o = [];
                 for (i = 0; i < obstructions.length; i++) {
-                    // TODO uuuuuugh this is such a hack; there needs to be a better way to keep NPCs from wandering into doors etc
-                    if (this === getPlayer() && !obstructions[i].active) {
+                    // TODO also check whether this obstruction applies to this entity
+                    if (!obstructions[i].active) {
                         continue;
                     }
                     closest = Cozy.closestPointOnLine(projectedPosition, obstructions[i].a, obstructions[i].b);

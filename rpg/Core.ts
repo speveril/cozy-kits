@@ -3,14 +3,13 @@ import * as Cozy from 'Cozy';
 import { Behavior } from './Behavior';
 import { Character } from './Character';
 import { ControlStack, ControlMode } from './ControlStack';
-import { Entity } from './Entity';
+import { Entity } from '../shared/Entity';
 import { Item } from './Item';
 import { frameMapMode } from './MapMode';
 import { Menu } from './Menu';
 import { Scene } from './Scene';
 
-import { GameMap } from './map/Map';
-import { MapLayer } from './map/MapLayer';
+import { GameMap } from '../shared/map/Map';
 
 let characters:{[key:string]:Character} = {};
 let loadSkip:Array<string>              = [];
@@ -88,6 +87,7 @@ export function load(config:any):Array<Promise<any>> {
             promises.push(spriteLookup[k].load());
         }        
     }
+    Entity.behaviors = Behavior;
 
     // scrape all images under the project
     let textures = {};
@@ -219,13 +219,11 @@ export function centerCameraOn(pt:{x:number,y:number}, snap?:boolean) {
     cameraFocus.y = cy;
 
     if (snap) {
-        // _.each(map.layers, (layer:MapLayer) => {
         // TODO parallax
         for (let layer of map.layers) {
             layer.patchLayer.offset(-cx + cameraHalf.x, -cy + cameraHalf.y);
             layer.spriteLayer.offset(-cx + cameraHalf.x, -cy + cameraHalf.y);
         }
-        // });
         if (map.debugLayer) map.debugLayer.offset(-cx + cameraHalf.x, -cy + cameraHalf.y);
     }
 }
@@ -322,7 +320,7 @@ export async function rawOpenMap(args:any, type?:any) {
     }
 
     let newmap = new type(args);
-    newmap.open();
+    newmap.open(getRenderPlane(), getDebugPlane());
 
     return newmap;
 }

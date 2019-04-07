@@ -1,7 +1,7 @@
 import * as Cozy from 'Cozy';
 import { getMap, getPlayer, getSFX } from './Core';
 import { ControlStack, ControlMode } from './ControlStack';
-import { Entity } from './Entity';
+import { Entity } from '../shared/Entity';
 import { Scene } from './Scene';
 
 export module Behavior {
