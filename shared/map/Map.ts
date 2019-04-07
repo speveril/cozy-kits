@@ -65,10 +65,9 @@ export class MapTrigger extends MapRect {
         this._solid = v;
         
         if (!this.obstructions) return;
-        // _.each(this.obstructions, function(o) {
-        this.obstructions.forEach((o) => {
+        for (let o of this.obstructions) {
             o.active = v;
-        });
+        }
     }
 }
 
