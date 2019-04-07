@@ -1,5 +1,5 @@
 import { Character } from './Character';
-import { Dice } from './Dice';
+import { Dice } from '../shared/Dice';
 
 export class Effect {
     static do(effect:string, source:any, target:any, params:Array<any>) {

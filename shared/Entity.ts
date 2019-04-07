@@ -90,11 +90,10 @@ export class Entity {
         this.movedLastFrame = false;
         this.pushStrength = args.pushStrength ||  this.spriteDef.pushStrength || 0;
         this.pushWeight = args.pushWeight || this.spriteDef.pushWeight || Infinity;
-        // this.params = _.clone(args);
         this.params = Object.assign({}, args);
 
         // TODO extra offset; let spawn define an additional offset to the hotspot to allow for entities "hovering above the ground"
-        // (or, sitting on top of some other thing)
+        //      (or, sitting on top of some other thing)
 
         if (args.hasOwnProperty('spawn')) {
             this.spawn = args.spawn;

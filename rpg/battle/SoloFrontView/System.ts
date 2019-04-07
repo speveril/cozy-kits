@@ -2,7 +2,7 @@ import * as Cozy from 'Cozy'
 import { getMoneyName, getMusic, getSFX, getUiPlane } from '../../Core';
 import { BouncyComponent } from '../../BouncyComponent';
 import { Character } from '../../Character';
-import { Dice } from '../../Dice';
+import { Dice } from '../../../shared/Dice';
 import { Effect } from '../../Effect';
 import { Item } from '../../Item';
 import { Menu } from '../../Menu';

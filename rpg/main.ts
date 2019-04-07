@@ -4,7 +4,6 @@ export * from './Behavior';
 export * from './BouncyComponent';
 export * from './Character';
 export * from './ControlStack';
-export * from './Dice';
 export * from './Effect';
 export * from './Inventory';
 export * from './Item';
@@ -16,6 +15,7 @@ export * from './Scene';
 
 export * from './battle/Battle';
 
+export * from '../shared/Dice';
 export * from '../shared/map/Loader';
 export * from '../shared/map/LoaderTMX';
 export * from '../shared/map/LoaderTSX';

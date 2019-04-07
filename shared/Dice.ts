@@ -1,4 +1,6 @@
-import { Character } from './Character';
+declare class Actor {
+    get(key:string):any;
+}
 
 function numberSort(a,b) {
     return a-b;
@@ -18,13 +20,13 @@ var rollDice = (numDice, dieSize) => {
 
 
 export class Dice {
-    actor:Character;
+    actor:Actor;
     tokens:string[];
     parseIndex:number;
     tree:any;
     indent:number;
 
-    static roll(actor:Character, s:string) {
+    static roll(actor:Actor, s:string) {
         var roll = new Dice(s);
         return roll.resolve(actor);
     }
@@ -195,12 +197,12 @@ export class Dice {
         this.parseIndex++;
     }
 
-    resolve(actor:Character) {
+    resolve(actor:Actor) {
         this.indent = 0;
         return this.resolveNode(actor, this.tree);
     }
 
-    resolveNode(actor:Character, node:any) {
+    resolveNode(actor:Actor, node:any) {
         var result = 0;
 
         switch (node.type) {
@@ -238,7 +240,7 @@ export class Dice {
         return result;
     }
 
-    func_roll(actor:Character, args:Array<any>):number {
+    func_roll(actor:Actor, args:Array<any>):number {
         var rolls = rollDice(
             <number>this.resolveNode(actor, args[0]),
             <number>this.resolveNode(actor, args[1]));
@@ -247,7 +249,7 @@ export class Dice {
         return result;
     }
 
-    func_best(actor:Character, args:Array<any>) {
+    func_best(actor:Actor, args:Array<any>) {
         if (args[1].type !== 'roll') throw new Error("Parameter 2 to best() must be a roll.");
         var best:number = <number>this.resolveNode(actor, args[0]);
         var rolls = rollDice(this.resolveNode(actor, args[1].lhs), this.resolveNode(actor, args[1].rhs));
@@ -257,7 +259,7 @@ export class Dice {
         return result;
     }
 
-    func_worst(actor:Character, args:Array<any>) {
+    func_worst(actor:Actor, args:Array<any>) {
         if (args[1].type !== 'roll') throw new Error("Parameter 2 to best() must be a roll.");
         var worst:number = <number>this.resolveNode(actor, args[0]);
         var rolls = rollDice(this.resolveNode(actor, args[1].lhs), this.resolveNode(actor, args[1].rhs));
