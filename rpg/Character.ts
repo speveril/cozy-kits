@@ -31,10 +31,12 @@ export class Character {
         this.name        = args.name;
         this.sprite      = args.sprite;
         this.levels      = args.levels || [];
-        this.treasure    = args.treasure ? args.treasure.slice(0) : []; // clone the treasure array, don't refer to it directly
+        this.treasure    = [];
+        if (args.treasure) {
+            this.treasure    = Array.isArray(args.treasure) ? args.treasure.slice(0) : [ args.treasure ];
+        }
 
         Character.attributes.forEach((attribute) => this.baseAttribute[attribute] = 0);
-        // if (_.has(args, 'attributes')) {
         if (args.hasOwnProperty('attributes')) {
             this.adjust(args.attributes);
         }
